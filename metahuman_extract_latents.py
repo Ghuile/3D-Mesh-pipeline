@@ -30,7 +30,7 @@ def run_latent_extraction():
     folder_mapping = {'female': 'female_medium_average', 'male': 'male_medium_average'}
     cohort_specs = {
         'female': {'vertices': 66993, 'weight_file': 'fmetahuman_autoencoder_trained.pth'},
-        'male': {'vertices': 131507, 'weight_file': 'mmetahuman_autoencoder_trained.pth'}
+        'male': {'vertices': 66991, 'weight_file': 'mmetahuman_autoencoder_trained.pth'}
     }
     
     networks = {}
