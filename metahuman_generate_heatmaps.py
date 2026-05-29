@@ -18,10 +18,10 @@ class MorphologicalEncoder(nn.Module):
     def forward(self, x):
         return self.network(x)
 
-def export_colorized_ply(filename, vertices, faces, normalized_gradients):
+def export_colorized_ply(filename, vertices, normalized_gradients):
     """
-    Saves a 3D PLY file with vertex colors mapped from sensitivity gradients.
-    Blue representing low attention, moving to red for high biometric attention.
+    Saves a 3D PLY file strictly as a Point Cloud with vertex colors mapped 
+    from sensitivity gradients. Eliminates dummy face artifacts entirely.
     """
     with open(filename, 'w') as f:
         f.write("ply\n")
@@ -33,22 +33,16 @@ def export_colorized_ply(filename, vertices, faces, normalized_gradients):
         f.write("property uchar red\n")
         f.write("property uchar green\n")
         f.write("property uchar blue\n")
-        f.write(f"element face {len(faces)}\n")
-        f.write("property list uchar int vertex_indices\n")
         f.write("end_header\n")
         
-        # Write vertices with colormap mapping (Jet-style gradient scale)
+        # Write out raw vertex locations paired with Jet colormap values
         for i, v in enumerate(vertices):
             grad_val = normalized_gradients[i]
-            # Simple Jet-like color ramp conversion
+            # Smooth Jet-style color ramp conversion (Blue -> Green -> Red)
             r = int(max(0, min(255, (grad_val - 0.5) * 2 * 255 if grad_val > 0.5 else 0)))
             g = int(max(0, min(255, (1 - 2 * abs(grad_val - 0.5)) * 255)))
             b = int(max(0, min(255, (0.5 - grad_val) * 2 * 255 if grad_val < 0.5 else 0)))
             f.write(f"{v[0]} {v[1]} {v[2]} {r} {g} {b}\n")
-            
-        # Write face indices
-        for face in faces:
-            f.write(f"3 {face[0]} {face[1]} {face[2]}\n")
 
 def generate_isolated_heatmap(cohort_name, specs, weights_dir, output_dir):
     print(f"\n🚀 Generating 3D Attention Heatmap for: {cohort_name.upper()}")
@@ -76,27 +70,21 @@ def generate_isolated_heatmap(cohort_name, specs, weights_dir, output_dir):
         print(f"❌ Error: Missing baseline template matrix at {template_path}")
         return
     
-    # Try loading template data safely
     try:
         raw_data = np.load(template_path, allow_pickle=True)
         if isinstance(raw_data, np.ndarray):
             vertices = raw_data
-            # Synthesize generic dummy faces if they are missing from raw template array
-            faces = np.array([[i, i+1, i+2] for i in range(0, len(vertices)-3, 3)])
         else:
-            vertices = raw_data['vertices']
-            faces = raw_data['faces']
-    except Exception:
-        # Fallback handling to ensure continuity
+            vertices = raw_data['vertices'] if 'vertices' in raw_data.files else raw_data
+    except Exception as e:
+        print(f"⚠️ Template read warning ({e}). Processing default layout structures.")
         vertices = np.zeros((specs['vertices'], 3))
-        faces = np.array([[0, 1, 2]])
-        print(f"⚠️ Template read warning. Processing default layout structures.")
+
+    # Reshape vertices from flat 1D to structured 3D coordinates (N, 3)
+    vertices = vertices.reshape(-1, 3)
 
     # 4. Execute Backpropagation Gradient Sensitivity Sweep (Saliency Map)
-    input_tensor = torch.tensor(vertices.flatten(), dtype=torch.float32, requires_grad=True).to(device)
-    
-    # CRITICAL FIX: Explicitly tell PyTorch to store gradients for this non-leaf tensor
-    input_tensor.retain_grad()
+    input_tensor = torch.tensor(vertices.flatten(), dtype=torch.float32, device=device).requires_grad_(True)
     
     latent_output = model(input_tensor.unsqueeze(0))
     
@@ -105,18 +93,23 @@ def generate_isolated_heatmap(cohort_name, specs, weights_dir, output_dir):
     model.zero_grad()
     target_dimension.backward()
     
-    # Now input_tensor.grad will be populated
     raw_gradients = input_tensor.grad.cpu().numpy().reshape(-1, 3)
     
     # 5. Process coordinate gradients into absolute vertex sensitivities
     spatial_sensitivities = np.linalg.norm(raw_gradients, axis=1)
     
-    # Normalize sensitivities between 0.0 and 1.0 for high-contrast color mapping
-    norm_sensitivities = (spatial_sensitivities - spatial_sensitivities.min()) / (spatial_sensitivities.max() - spatial_sensitivities.min() + 1e-8)
+    # NEW ROBUST FIX: Use percentiles to clip extreme outlier gradient spikes.
+    # This prevents a single outlier vertex from squashing the color profile of the rest of the body.
+    v_min = np.percentile(spatial_sensitivities, 2)
+    v_max = np.percentile(spatial_sensitivities, 98)
+    clipped_sensitivities = np.clip(spatial_sensitivities, v_min, v_max)
     
-    # 6. Export colorized asset
+    # Normalize between 0.0 and 1.0 based on clipped boundaries
+    norm_sensitivities = (clipped_sensitivities - v_min) / (v_max - v_min + 1e-8)
+    
+    # 6. Export colorized asset strictly as a Point Cloud
     output_path = os.path.join(output_dir, f"{cohort_name}_biometric_attention_heatmap.ply")
-    export_colorized_ply(output_path, vertices, faces, norm_sensitivities)
+    export_colorized_ply(output_path, vertices, norm_sensitivities)
     print(f"✅ Pristine {cohort_name.upper()} surface map successfully generated.")
     print(f"   Saved to: {output_path}")
 
@@ -124,7 +117,6 @@ def run_split_heatmap_pipeline():
     weights_dir = r"C:\Users\Vasileios Nikolaou\Documents\PhD\Metahuman_project"
     output_dir = r"C:\Users\Vasileios Nikolaou\Documents\PhD\research_pipeline\data_parsed"
     
-    # Separate configuration parameters completely by cohort branch
     cohort_specs = {
         'female': {
             'vertices': 66993, 
@@ -138,7 +130,6 @@ def run_split_heatmap_pipeline():
         }
     }
     
-    # Process both branches in strict isolation
     for cohort_label, specs in cohort_specs.items():
         generate_isolated_heatmap(cohort_label, specs, weights_dir, output_dir)
 
