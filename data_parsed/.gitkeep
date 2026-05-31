@@ -1,0 +1,2 @@
+# This file ensures the data_parsed directory is tracked by git
+# Data files are excluded via .gitignore

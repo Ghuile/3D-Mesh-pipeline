@@ -139,7 +139,15 @@ dmypy.json
 Thumbs.db
 
 # Project-specific: Exclude large dataset files
-# Allow directories but exclude specific file types
+# Keep directory structure but ignore data files
+data_generation/**
+!data_generation/.gitkeep
+data_parsed/**
+!data_parsed/.gitkeep
+data_sanitized/**
+!data_sanitized/.gitkeep
+
+# Specific file type exclusions for root level
 *.zip
 *.tar.gz
 *.7z
@@ -150,9 +158,6 @@ Thumbs.db
 *.pth
 *.pt
 *.ckpt
-
-# Exclude data_sanitized completely (not needed in repo)
-data_sanitized/
 
 # Output files
 output/
