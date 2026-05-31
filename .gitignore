@@ -106,6 +106,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# Virtual environment - DO NOT COMMIT
+# Regenerate with: python -m venv venv && pip install -r requirements.txt
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -135,18 +138,21 @@ dmypy.json
 .DS_Store
 Thumbs.db
 
-# Project-specific data (DO NOT UPLOAD)
-data_generation/
-data_parsed/
-data_sanitized/
+# Project-specific: Exclude large dataset files
+# Allow directories but exclude specific file types
 *.zip
 *.tar.gz
 *.7z
+*.fbx
+*.npz
 
 # Model checkpoints and weights
 *.pth
 *.pt
 *.ckpt
+
+# Exclude data_sanitized completely (not needed in repo)
+data_sanitized/
 
 # Output files
 output/
