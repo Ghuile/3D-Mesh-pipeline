@@ -60,7 +60,7 @@ pip install -r requirements.txt
 
 ## Datasets
 
-This project uses large 3D mesh datasets hosted on Hugging Face for reproducibility and easy access.
+This project uses large 3D mesh datasets hosted on Hugging Face for reproducibility and easy access. (will upload soon)
 
 ### Dataset Availability
 
