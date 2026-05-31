@@ -1,20 +1,62 @@
 # Auto detect text files and normalize line endings to LF
 * text=auto
 
-# Python files
+# Source Code
 *.py text eol=lf
+*.sh text eol=lf
+*.bash text eol=lf
 
-# Documentation
+# Windows batch files (keep CRLF for Windows compatibility)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Documentation and Configuration
 *.md text eol=lf
 *.txt text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
 *.json text eol=lf
+*.csv text eol=lf
 
-# Binary files
-*.zip binary
-*.tar.gz binary
+# 3D Mesh Formats
+*.obj text eol=lf
+*.fbx binary
+*.blend binary
+*.uasset binary
+*.umap binary
+
+# Jupyter Notebooks (binary JSON format)
+*.ipynb binary
+
+# Python Binary/Serialized Files
 *.pth binary
 *.pt binary
 *.pkl binary
+*.pickle binary
 *.npz binary
+
+# Compression Archives
+*.zip binary
+*.tar binary
+*.tar.gz binary
+*.tgz binary
+*.rar binary
+*.7z binary
+
+# Image Files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.tiff binary
+
+# Video Files
+*.mp4 binary
+*.avi binary
+*.mov binary
+*.mkv binary
+
+# Git-related
+.gitattributes text eol=lf
+.gitignore text eol=lf
