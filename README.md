@@ -60,15 +60,15 @@ pip install -r requirements.txt
 
 ## Datasets
 
-This project uses large 3D mesh datasets hosted on Hugging Face for reproducibility and easy access. (will upload soon)
+This project uses large 3D mesh datasets hosted on Hugging Face for reproducibility and easy access.
 
 ### Dataset Availability
 
 All datasets are available on the Hugging Face Hub:
 
-- **Data Generation**: [your-username/metahuman-data-generation](https://huggingface.co/datasets/your-username/metahuman-data-generation)
-- **Data Parsed**: [your-username/metahuman-data-parsed](https://huggingface.co/datasets/your-username/metahuman-data-parsed)
-- **Data Sanitized**: [your-username/metahuman-data-sanitized](https://huggingface.co/datasets/your-username/metahuman-data-sanitized)
+- **Data Generation**: https://huggingface.co/datasets/Ghuile/metahuman-data-generation/tree/main
+- **Data Parsed**: https://huggingface.co/datasets/Ghuile/metahuman-data-parsed
+- **Data Sanitized**: https://huggingface.co/datasets/Ghuile/metahuman-data-generation
 
 ### Dataset Sizes
 
