@@ -78,59 +78,7 @@ All datasets are available on the Hugging Face Hub:
 | Data Parsed | ~223 MB | Preprocessed mesh data in NumPy/tensor format |
 | Data Sanitized | ~2.2 GB | Cleaned and validated mesh data ready for training |
 
-### Downloading Datasets
 
-#### Option 1: Using Hugging Face Datasets Library (Recommended)
-
-```bash
-# Install Hugging Face datasets
-pip install datasets
-
-# Download data in Python
-from datasets import load_dataset
-
-# Download specific dataset
-dataset = load_dataset("your-username/metahuman-data-parsed")
-
-# Access files
-data = dataset['train']
-```
-
-#### Option 2: Manual Download
-
-Visit the dataset pages on Hugging Face and download files directly:
-```
-https://huggingface.co/datasets/your-username/metahuman-data-parsed/tree/main
-```
-
-#### Option 3: Git LFS (for development)
-
-```bash
-# Install Git LFS
-git lfs install
-
-# Clone dataset repository
-git clone https://huggingface.co/datasets/your-username/metahuman-data-parsed
-cd metahuman-data-parsed
-```
-
-### Setting Up Datasets Locally
-
-After downloading, organize datasets in your project directory:
-
-```bash
-# Create data directories
-mkdir -p data_generation data_parsed data_sanitized
-
-# Extract downloaded files
-unzip data_generation.zip -d data_generation/
-unzip data_parsed.zip -d data_parsed/
-unzip data_sanitized.zip -d data_sanitized/
-```
-
-### Dataset Documentation
-
-For detailed information about dataset contents, structure, and format specifications, see [DATASETS.md](DATASETS.md) (coming soon)
 
 ### Basic Workflow
 
@@ -248,19 +196,9 @@ data_sanitized/          # Cleaned and validated data ready for training
 - Input dimension: 200,979 vertices
 - Latent dimension: 32
 - Optimized for GPU acceleration
-
-## Contributing
-
-This is a research project. For contributions, please maintain code style and ensure all changes are backward compatible.
+.
 
 ## License
 
 See LICENSE file for details.
 
-## Citation
-
-If you use this pipeline in your research, please cite appropriately.
-
-## Contact
-
-For questions or issues, please refer to the documentation in individual scripts.
