@@ -102,30 +102,6 @@ All datasets are available on the Hugging Face Hub:
    python metahuman_generate_heatmaps.py
    ```
 
-### Synthetic Data Generation
-
-To generate synthetic MetaHuman models for expanded datasets:
-
-1. **Generate phenotypic anchors**:
-   ```bash
-   python data_generation/generate_phenotype_anchors.py
-   ```
-
-2. **Generate MetaHuman models**:
-   ```bash
-   python data_generation/unreal_metahuman_generator.py
-   ```
-
-3. **Validate topology consistency**:
-   ```bash
-   python data_generation/validate_topology_invariants.py
-   ```
-
-4. **Assemble synthetic cohorts**:
-   ```bash
-   python data_generation/assemble_synthetic_cohort.py
-   ```
-
 ### Cloud Training
 
 For large-scale training on cloud infrastructure, use the provided Jupyter notebooks:
