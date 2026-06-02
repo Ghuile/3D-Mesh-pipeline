@@ -66,9 +66,11 @@ This project uses large 3D mesh datasets hosted on Hugging Face for reproducibil
 
 All datasets are available on the Hugging Face Hub:
 
-- **Data Generation**: https://huggingface.co/datasets/Ghuile/metahuman-data-generation/tree/main
-- **Data Parsed**: https://huggingface.co/datasets/Ghuile/metahuman-data-parsed
-- **Data Sanitized**: https://huggingface.co/datasets/Ghuile/metahuman-data-generation
+- **Data Generation**: https://huggingface.co/datasets/Ghuile/metahuman-data-generation/tree/main 
+- **Data Parsed**: https://huggingface.co/datasets/Ghuile/metahuman-data-parsed 
+- **Data Sanitized**: https://huggingface.co/datasets/Ghuile/metahuman-data-generation 
+
+or in general : https://huggingface.co/Ghuile/datasets
 
 ### Dataset Sizes
 
