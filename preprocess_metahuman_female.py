@@ -37,7 +37,7 @@ def process_sanitized_obj(obj_path, output_dir):
         v_arr = np.array(global_vertices, dtype=np.float32)
         f_arr = np.array(global_faces, dtype=np.int32)
     else:
-        # --- STRATEGY A: ACADEMIC COMPONENT FILTERING ---
+        
         # Find the primary body shell by locating the sub-mesh block with the largest vertex footprint
         body_object_name = max(object_vertices, key=lambda k: len(object_vertices[k]))
         body_vertex_indices = set(object_vertices[body_object_name])

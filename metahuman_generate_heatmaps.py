@@ -98,8 +98,7 @@ def generate_isolated_heatmap(cohort_name, specs, weights_dir, output_dir):
     # 5. Process coordinate gradients into absolute vertex sensitivities
     spatial_sensitivities = np.linalg.norm(raw_gradients, axis=1)
     
-    # NEW ROBUST FIX: Use percentiles to clip extreme outlier gradient spikes.
-    # This prevents a single outlier vertex from squashing the color profile of the rest of the body.
+    
     v_min = np.percentile(spatial_sensitivities, 2)
     v_max = np.percentile(spatial_sensitivities, 98)
     clipped_sensitivities = np.clip(spatial_sensitivities, v_min, v_max)

@@ -1,7 +1,7 @@
 import os
 import sys
 import bpy
-
+# for Blender.
 def run_dataset_validation():
     # Find the output folder where our 3D meshes live
     script_dir = os.path.dirname(os.path.abspath(__file__))
