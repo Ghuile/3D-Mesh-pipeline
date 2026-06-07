@@ -2,7 +2,7 @@ import os
 import sys
 import csv
 import bpy
-
+# For Blender.
 def run_cohort_generation():
     # 1. Setup paths and find command line parameters
     argv = sys.argv

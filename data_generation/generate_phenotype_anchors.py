@@ -2,7 +2,7 @@ import os
 import sys
 import math
 import bpy
-
+#Phenotype Anchor Generation Script, Blender Edition.
 def generate_biologically_accurate_anchors():
     # Establish local workspace paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
