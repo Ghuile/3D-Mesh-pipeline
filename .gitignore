@@ -168,3 +168,46 @@ logs/
 tmp/
 temp/
 *.tmp
+
+# ==========================================================================
+# 3D COMPUTER VISION PIPELINE - DATASET & WEIGHTS ISOLATION
+# ==========================================================================
+
+# 1. Global Large Binary File Extensions Block
+*.fbx
+*.obj
+*.npz
+*.ply
+*.pth
+*.pt
+*.onnx
+
+# 2. Isolate Baseline Data Directories (Allowing Folder Structure Tracking)
+/data_generation/**
+!/data_generation/**/.gitkeep
+!/data_generation/**/*.py
+!/data_generation/**/*.csv
+
+/data_sanitized/**
+!/data_sanitized/**/.gitkeep
+
+/data_parsed/**
+!/data_parsed/**/.gitkeep
+
+# 3. Isolate OOD Stress-Test Data Directories
+/data_stress_test/**
+!/data_stress_test/**/.gitkeep
+
+/data_sanitized_stress_test/**
+!/data_sanitized_stress_test/**/.gitkeep
+
+/data_parsed_stress_test/**
+!/data_parsed_stress_test/**/.gitkeep
+
+# 4. Global OS & Local IDE Cache Cleanup
+.idea/
+.vscode/
+__pycache__/
+*.log
+temp_blender_*.py
+temp_stress_blender_*.py
