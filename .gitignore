@@ -195,14 +195,14 @@ temp/
 !/data_parsed/**/.gitkeep
 
 # 3. Isolate OOD Stress-Test Data Directories
-/data_stress_test/**
-!/data_stress_test/**/.gitkeep
+/data_stress_test/*
+!/data_stress_test/.gitkeep
 
-/data_sanitized_stress_test/**
-!/data_sanitized_stress_test/**/.gitkeep
+/data_sanitized_stress_test/*
+!/data_sanitized_stress_test/.gitkeep
 
-/data_parsed_stress_test/**
-!/data_parsed_stress_test/**/.gitkeep
+/data_parsed_stress_test/*
+!/data_parsed_stress_test/.gitkeep
 
 # 4. Global OS & Local IDE Cache Cleanup
 .idea/
