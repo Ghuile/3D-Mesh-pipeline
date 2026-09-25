@@ -1,3 +1,9 @@
+# Plot direct-coordinate Ridge predictions on OOD meshes.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -53,7 +59,7 @@ def build_publication_stress_benchmarks():
         X_test = np.array(X_test_list)
         y_test = y_stress[cohorts_stress == target_cohort][:len(X_test)]
         
-        # Structural alignment check
+        # Truncate to a common feature length; this does not verify correspondence.
         min_features = min(X_train.shape[1], X_test.shape[1])
         X_train = X_train[:, :min_features]
         X_test = X_test[:, :min_features]

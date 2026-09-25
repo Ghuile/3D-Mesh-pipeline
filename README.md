@@ -1,182 +1,75 @@
-# Research Pipeline
+# 3D Mesh Pipeline
 
-A comprehensive research pipeline for 3D human body mesh processing and analysis using machine learning, with focus on biometric attribute prediction and latent space exploration.
+Research code accompanying **Decoupled Parametric Human Shape Generation: A Fully Synthetic Framework for Biometric and Adiposity Estimation**, by Vasileios Nikolaou, Daqing Chen, and Perry Xiao.
 
-## Overview
+The pipeline generates synthetic MetaHuman body meshes, prepares coordinate arrays, trains cohort-specific morphological autoencoders, and evaluates regression models for synthetic body-fat-percentage targets. It includes coordinate-noise experiments and out-of-distribution (OOD) evaluation.
 
-This project provides a complete pipeline for:
-- **3D Mesh Processing**: Parse and process FBX files containing human body models
-- **Biometric Extraction**: Extract physical attributes (height, body fat percentage) from mesh data
-- **Deep Learning**: Train a disentangled autoencoder for mesh reconstruction and attribute prediction
-- **Analysis & Visualization**: Generate heatmaps, registry files, and latent space visualizations
+[Paper](CPSI20_CR_Final.pdf) · [Installation](INSTALLATION.md) · [Reproducibility](docs/REPRODUCIBILITY.md) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
-## Project Structure
+![Research pipeline overview from the accompanying paper](Figure%201.png)
 
-### Data Processing
-- `preprocess_pipeline.py` - Main preprocessing pipeline for mesh data
-- `preprocess_metahuman_female.py` - Female-specific preprocessing
-- `preprocess_metahuman_male.py` - Male-specific preprocessing
-- `sanitize_pipeline_female.py` - Data sanitization for female data
-- `sanitize_pipeline_male.py` - Data sanitization for male data
+## Research scope
 
-### Data Generation
-- `data_generation/unreal_metahuman_generator.py` - Generate synthetic MetaHuman models from Unreal Engine
-- `data_generation/generate_phenotype_anchors.py` - Generate phenotypic anchor points for biometric attributes
-- `data_generation/assemble_synthetic_cohort.py` - Assemble synthetic cohorts from generated models
-- `data_generation/validate_topology_invariants.py` - Validate mesh topology consistency across synthetic models
+The baseline generation design uses a 10 × 10 parameter grid for each of two MetaHuman cohorts. Body-fat-percentage labels are derived from geometric scale parameters; they are synthetic targets, not measured body composition.
 
-### Model Training & Inference
-- `train_3dae.py` - Train a memory-optimized 3D autoencoder
-- `metahuman_extract_latents.py` - Extract latent representations from trained model
-- `metahuman_direct_regressor.py` - Direct regression model for biometric prediction
+The notebooks use a 32-dimensional latent representation. Input sizes are 66,993 vertices × 3 coordinates for the female cohort and 66,991 × 3 for the male cohort: 200,979 and 200,973 input values, respectively.
 
-### Evaluation & Visualization
-- `metahuman_regressor_bench.py` - Benchmark regression model performance
-- `metahuman_generate_heatmaps.py` - Generate visualization heatmaps
-- `metahuman_plot_biometric_results.py` - Plot biometric analysis results
-- `metahuman_generate_registry.py` - Generate data registry files
-- `verify_topology.py` - Verify mesh topology consistency
+This repository preserves research scripts with local paths and external asset requirements. Read the [configuration and known differences](docs/REPRODUCIBILITY.md#configuration-and-known-differences) before running experiments. An end-to-end reproduction has not been verified during the documentation cleanup.
 
-### Jupyter Notebooks
-- `fmetahuman_cloud_training.ipynb` - Female model cloud training workflow
-- `mmetahuman_cloud_training.ipynb` - Male model cloud training workflow
+## Workflow
 
-### Quality Assurance
-- `metahuman_check_female_base.py` - Verify female base model integrity
+| Stage | Entry points | Environment |
+|---|---|---|
+| Generate baseline assets | `data_generation/unreal_metahuman_generator.py` | Unreal Editor Python |
+| Sanitize FBX to OBJ | `sanitize_pipeline_female.py`, `sanitize_pipeline_male.py` | Python launching Blender |
+| Parse OBJ coordinates | `preprocess_metahuman_female.py`, `preprocess_metahuman_male.py` | Local Python |
+| Validate and build metadata | `verify_topology.py`, `metahuman_generate_registry.py` | Local Python |
+| Train and explore latent space | `fmetahuman_cloud_training.ipynb`, `mmetahuman_cloud_training.ipynb` | Google Colab |
+| Extract and benchmark | `metahuman_extract_latents.py`, `metahuman_regressor_bench.py` | Python and saved checkpoints |
+| Plot baseline results | `metahuman_plot_biometric_results.py`, `metahuman_direct_regressor.py` | Local Python |
+| Export sensitivity maps | `metahuman_generate_heatmaps.py` | Python, checkpoints, mean templates |
+| Evaluate coordinate noise | `test_noise_robustness_combined.py` and cohort variants | Python and checkpoints |
+| Evaluate OOD data | Stress-test generation, sanitization, parsing, and evaluation scripts | Unreal Editor, Blender, Python |
 
-## Requirements
+The notebooks create `train_metahuman_autoencoder.py` within Colab. There is no standalone `train_3dae.py` in this checkout. The `test_noise_robustness_*.py` files are experiment scripts, not a unit-test suite.
 
-- Python 3.8+
-- PyTorch
-- NumPy
-- Open3D
-- Additional dependencies as specified in requirements.txt
-
-## Installation
+## Getting started
 
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/Ghuile/3D-Mesh-pipeline.git
+cd 3D-Mesh-pipeline
+python -m venv .venv
 ```
 
-## Datasets
+Follow [INSTALLATION.md](INSTALLATION.md) to activate the environment and install dependencies. Use the ordered steps in [REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) after configuring dataset, executable, checkpoint, and Unreal asset paths.
 
-This project uses large 3D mesh datasets hosted on Hugging Face for reproducibility and easy access.
+## Data and artifacts
 
-### Dataset Availability
+The existing project documentation points to these external dataset repositories:
 
-All datasets are available on the Hugging Face Hub:
+- [MetaHuman generation data](https://huggingface.co/datasets/Ghuile/metahuman-data-generation)
+- [Parsed MetaHuman data](https://huggingface.co/datasets/Ghuile/metahuman-data-parsed)
+- [Dataset collection](https://huggingface.co/Ghuile/datasets)
 
-- **Data Generation**: https://huggingface.co/datasets/Ghuile/metahuman-data-generation/tree/main 
-- **Data Parsed**: https://huggingface.co/datasets/Ghuile/metahuman-data-parsed 
-- **Data Sanitized**: https://huggingface.co/datasets/Ghuile/metahuman-data-generation 
+Check file listings and revisions before use. A separate sanitized-data URL, immutable dataset revisions, checksums, and a checkpoint release are not established by this checkout.
 
-or in general : https://huggingface.co/Ghuile/datasets
+| Location | Contents |
+|---|---|
+| `data_generation/` | Tracked generation scripts and population metadata; local raw assets |
+| `data_sanitized/` | Local baseline OBJ meshes |
+| `data_parsed/` | Local baseline NPZ arrays, registry, features, and results |
+| `data_stress_test/` | Local OOD FBX assets |
+| `data_sanitized_stress_test/` | Local OOD OBJ meshes |
+| `data_parsed_stress_test/` | Local OOD NPZ arrays and features |
 
-### Dataset Sizes
+Mesh arrays use `vertices` with shape `(N, 3)` and `faces` with shape `(M, 3)`. See the reproducibility guide for metadata, ordering, and units. Large assets and generated checkpoints are excluded from Git.
 
-| Dataset | Size | Contents |
-|---------|------|----------|
-| Data Generation | ~7 GB | Raw synthetic MetaHuman models, base FBX files, phenotype anchors |
-| Data Parsed | ~223 MB | Preprocessed mesh data in NumPy/tensor format |
-| Data Sanitized | ~2.2 GB | Cleaned and validated mesh data ready for training |
+## Paper and citation
 
+Use the [camera-ready paper](CPSI20_CR_Final.pdf) as the primary included reference. The [earlier manuscript](CPSI%20Manuscript.pdf) remains for provenance; its figures and results differ from the camera-ready version.
 
-
-### Basic Workflow
-
-1. **Preprocess data**:
-   ```bash
-   python preprocess_pipeline.py
-   ```
-
-2. **Train model**:
-   ```bash
-   python train_3dae.py
-   ```
-
-3. **Extract latents**:
-   ```bash
-   python metahuman_extract_latents.py
-   ```
-
-4. **Generate visualizations**:
-   ```bash
-   python metahuman_generate_heatmaps.py
-   ```
-
-### Cloud Training
-
-For large-scale training on cloud infrastructure, use the provided Jupyter notebooks:
-- `fmetahuman_cloud_training.ipynb` - Female model training
-- `mmetahuman_cloud_training.ipynb` - Male model training
-
-### Benchmarking & Evaluation
-
-To evaluate model performance:
-
-```bash
-python metahuman_regressor_bench.py
-python metahuman_plot_biometric_results.py
-```
-
-## Data Format
-
-### Naming Convention
-
-The pipeline expects FBX files with standardized naming convention:
-```
-step_h{H}_f{F}_val_h{H_VAL}_f{F_VAL}
-```
-
-Where:
-- **H**: Height index
-- **F**: Fat index  
-- **H_VAL**: Height scale value
-- **F_VAL**: Fat scale value
-
-### Directory Structure
-
-```
-data_generation/          # Raw synthetic models from Unreal/Blender
-├── metahuman_base.fbx
-├── population_matrix.csv
-└── [synthetic models generated by unreal_metahuman_generator.py]
-
-data_parsed/             # Preprocessed mesh data
-├── [numpy arrays and tensors]
-└── [parsed biometric attributes]
-
-data_sanitized/          # Cleaned and validated data ready for training
-├── [processed meshes]
-└── [quality-verified datasets]
-```
-
-### File Formats
-
-- **FBX**: Binary 3D mesh format (source data)
-- **NPZ**: NumPy compressed arrays (parsed data)
-- **PKL**: Pickle serialized Python objects (processed data)
-- **CSV**: Metadata and population matrices
-
-## Key Features
-
-- **Synthetic Data Generation**: Create diverse MetaHuman models with controlled phenotypic variations
-- **Biometric Metadata Extraction**: Automatically parses physical attributes from filenames
-- **Topology Validation**: Ensures mesh consistency and topology invariance across synthetic and real datasets
-- **Memory-Optimized Architecture**: Fits 6GB VRAM constraints with 200K+ vertex meshes
-- **Disentangled Representation**: Separates mesh variation from biometric attributes in latent space
-- **Cloud Training Support**: Jupyter notebooks for distributed training on cloud platforms
-- **Comprehensive Benchmarking**: Regression model evaluation with detailed performance metrics
-- **Heatmap Visualization**: Generate informative heatmap visualizations for mesh attributes
-
-## Performance
-
-- Input dimension: 200,979 vertices
-- Latent dimension: 32
-- Optimized for GPU acceleration
-.
+Citation metadata is provided in [CITATION.cff](CITATION.cff). Venue details and a DOI are omitted pending verification.
 
 ## License
 
-See LICENSE file for details.
-
+Repository software is provided under the [MIT License](LICENSE). Existing third-party notices and acknowledgements are retained in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

@@ -1,3 +1,9 @@
+# Extract OOD encoder features and extrapolated synthetic BFP targets.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import torch
 import torch.nn as nn
@@ -64,13 +70,13 @@ def run_stress_latent_extraction():
             with torch.no_grad():
                 latent_vector = networks[cohort](input_tensor).cpu().numpy().flatten()
                 
-            # FIXED: Linearly extrapolate raw multiplier directly into Body Fat Percentage bounds
+            # Linearly extrapolate the fat multiplier using baseline synthetic BFP bounds.
             f_scale = mesh_data['actual_fat_scale']
             normalized_fat = (f_scale - fat_min) / (fat_max - fat_min)
             calculated_bfp = bounds['bfp_min'] + (normalized_fat * (bounds['bfp_max'] - bounds['bfp_min']))
             
             extracted_latents.append(latent_vector)
-            extracted_targets.append(calculated_bfp) # Appending correct BFP targets
+            extracted_targets.append(calculated_bfp) # Store the extrapolated synthetic target.
             extracted_cohorts.append(cohort_key)
         
     np.savez(

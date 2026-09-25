@@ -1,3 +1,9 @@
+# Evaluate coordinate-based diagnostic probes on baseline and OOD arrays.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import numpy as np
 from sklearn.linear_model import Ridge

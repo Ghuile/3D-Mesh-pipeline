@@ -1,3 +1,9 @@
+# Export coordinate-gradient sensitivity maps as colored PLY point clouds.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import torch
 import torch.nn as nn

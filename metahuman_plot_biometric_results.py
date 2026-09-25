@@ -1,3 +1,9 @@
+# Plot saved baseline MLP and Gaussian process predictions.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt

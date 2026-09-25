@@ -1,251 +1,35 @@
-# Contributing Guidelines
+# Contributing
 
-Welcome! This is a research project focused on 3D mesh processing and biometric analysis. We appreciate contributions that improve the codebase, documentation, and overall project quality.
+Contributions should improve the clarity, reproducibility, or correctness of the research workflow. Identify the affected stage and distinguish documentation changes from experimental changes.
 
-## Getting Started
+## Making a change
 
-1. Fork the repository
-2. Clone your fork locally
-3. Create a virtual environment
-4. Install development dependencies: `pip install -r requirements.txt`
-5. Create a feature branch from `main`
+1. Create a branch from the revision you intend to update.
+2. Keep the change focused and describe its purpose.
+3. Update usage and reproducibility documentation.
+4. Record notable changes under `Unreleased` in `CHANGELOG.md`.
+5. Open a pull request with validation evidence.
 
-## Code Style
+Use descriptive names and concise comments explaining assumptions, units, indexing, and methodological choices. Document function inputs, outputs, and side effects where needed. Avoid guarantees of anatomical validity, convergence, or topology equivalence unless the implementation checks them.
 
-- **PEP 8**: Follow Python Enhancement Proposal 8 conventions
-- **Naming**: Use meaningful, descriptive names for variables and functions
-- **Docstrings**: Add docstrings to all functions explaining purpose, parameters, and return values
-- **Type Hints**: Include type hints for function signatures where applicable
-- **Comments**: Comment complex logic, but keep comments concise and accurate
-- **Line Length**: Aim for maximum 100 characters per line
+## Validation
 
-### Example Function
+For documentation-only changes, run `git diff --check`, verify local links, and compare Python syntax trees after excluding docstrings. Preserve notebook code cells, outputs, execution counts, and existing metadata. Embedded Blender programs are executable strings and must also remain unchanged.
 
-```python
-def extract_biometric_attributes(mesh_path: str, output_dir: str) -> Dict[str, float]:
-    """
-    Extract biometric attributes from a 3D mesh file.
-    
-    Args:
-        mesh_path: Path to the input mesh file (FBX, OBJ, etc.)
-        output_dir: Directory to save extracted features
-        
-    Returns:
-        Dictionary containing extracted attributes (height, fat_percentage, etc.)
-        
-    Raises:
-        FileNotFoundError: If mesh_path does not exist
-        ValueError: If mesh format is not supported
-    """
-    # Implementation here
-    pass
-```
+For code changes, report the script, dataset revision, environment, checkpoint, and command used. Include relevant before/after metrics and differences from the paper. Use Blender or Unreal Editor for scripts requiring their APIs.
 
-## Development Workflow
+There is no tracked unit-test suite. The `test_noise_robustness_*.py` scripts are experiments requiring data and checkpoints. Do not assume scripts implement `--help` or `--test`. Avoid importing scripts simply to check syntax: some execute processing at module scope.
 
-1. **Create a branch** for your feature:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
+## Data and artifacts
 
-2. **Make your changes** while following code style guidelines
+Keep raw meshes, generated arrays, checkpoints, local environments, and experiment outputs out of commits. Generation scripts and the existing population CSV are tracked source materials; preserve those exceptions in ignore rules.
 
-3. **Test your code**:
-   ```bash
-   # Test with sample data
-   python your_script.py --test
-   
-   # Verify imports work
-   python -c "from your_module import YourClass"
-   ```
+Record dataset revisions, processing order, units, seeds, environment versions, and checkpoint provenance. Describe synthetic targets accurately.
 
-4. **Update documentation**:
-   - Add docstrings to new functions
-   - Update README.md if behavior changes
-   - Document any new dependencies
+## Pull requests
 
-5. **Commit with clear messages**:
-   ```bash
-   git commit -m "Add feature: brief description"
-   ```
+Include the problem, resulting behavior, affected stages, validation performed, and checks not performed. Explain effects on paper results, artifacts, dependencies, or configuration. Changes to numerical parameters, architecture, data ordering, or preprocessing must not be hidden in a comment cleanup.
 
-6. **Push and open a Pull Request**
+## License and support
 
-## Data Handling
-
-⚠️ **IMPORTANT**: This repository should **NOT** contain any data files.
-
-- **No data commits**: Ensure `.gitignore` includes all data directories (`data_generation/`, `data_parsed/`, `data_sanitized/`)
-- **Document requirements**: Describe expected data formats in script docstrings
-- **Use relative paths**: For portability, use relative paths for data access
-- **Validate paths**: Check that files exist before processing
-- **Add .gitignore entries**: If you create new data directories, add them to `.gitignore`
-
-### Data Directory Structure
-
-```
-data_generation/    # Synthetic data generation outputs (not committed)
-data_parsed/        # Preprocessed mesh data (not committed)
-data_sanitized/     # Sanitized/cleaned data (not committed)
-```
-
-## Testing Requirements
-
-Before submitting a pull request:
-
-- ✅ Test code with sample data
-- ✅ Verify backward compatibility with existing code
-- ✅ Ensure no hardcoded paths or credentials
-- ✅ Check that new dependencies are documented in requirements.txt
-- ✅ Validate error handling for edge cases
-- ✅ Test on both GPU and CPU if applicable
-
-### Running Tests
-
-```bash
-# Test individual script
-python script_name.py --help
-
-# Verify imports
-python -c "import module_name; print('OK')"
-
-# Quick functionality test
-python -m pytest tests/ -v  # if tests exist
-```
-
-## Commit Messages
-
-Use clear, descriptive commit messages following this format:
-
-```
-Short description (50 chars max)
-
-Longer explanation of the changes made, why they were needed,
-and any important context. Wrap at 72 characters.
-
-- List specific changes
-- One change per bullet point
-```
-
-### Examples
-
-✅ **Good**:
-```
-Add heatmap visualization for mesh attributes
-
-Implement visualization of vertex-level attributes on 3D meshes.
-Uses matplotlib for rendering and color mapping. Includes support
-for custom color schemes and output formats.
-
-- Add metahuman_generate_heatmaps.py
-- Support PNG and PDF exports
-- Add colormap customization
-```
-
-❌ **Bad**:
-```
-fixes stuff
-```
-
-## Pull Request Guidelines
-
-### Before Submitting
-
-- [ ] Code follows PEP 8 style guide
-- [ ] All new functions have docstrings
-- [ ] No data files are committed
-- [ ] Changes maintain backward compatibility
-- [ ] README/documentation is updated if needed
-- [ ] New dependencies are documented
-
-### PR Description Template
-
-```markdown
-## Description
-Brief description of changes
-
-## Type of Change
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Documentation update
-- [ ] Performance improvement
-
-## Related Issues
-Closes #(issue number)
-
-## Testing
-Describe how you tested the changes
-
-## Checklist
-- [ ] Code follows style guidelines
-- [ ] Documentation updated
-- [ ] No data files committed
-```
-
-## Code Review
-
-All submissions undergo review for:
-
-1. **Code Quality**: Readability, efficiency, and maintainability
-2. **Style Compliance**: Adherence to PEP 8 and project guidelines
-3. **Data Safety**: No accidental data or credential commits
-4. **Documentation**: Adequate docstrings and comments
-5. **Testing**: Code tested with sample data
-6. **Dependencies**: New packages properly documented
-
-## Integration with External Tools
-
-### Blender Integration
-- Ensure `bpy` is properly installed: `blender --python -m pip install bpy`
-- Test scripts in Blender context when modifying `sanitize_pipeline_*.py`
-- Document any Blender version requirements
-
-### Unreal Engine Integration
-- Test Unreal Engine scripts in appropriate UE5 environment
-- Document Python version compatibility
-- Provide fallback for environments without UE5
-
-## Performance Considerations
-
-When contributing code that processes large meshes:
-
-- Consider memory footprint (target: <6GB VRAM)
-- Profile code for bottlenecks
-- Document computational complexity
-- Provide options for batch processing if applicable
-
-## Documentation
-
-### Adding Documentation
-
-- Update README.md for new features
-- Add docstrings following Google/NumPy style
-- Include usage examples in script headers
-- Document any configuration parameters
-
-### Example Script Header
-
-```python
-"""
-Module: metahuman_extract_latents.py
-Purpose: Extract latent representations from trained 3D autoencoder
-
-Usage:
-    python metahuman_extract_latents.py --model path/to/model.pth --data data_parsed/
-
-Author: Your Name
-Date: 2024-XX-XX
-"""
-```
-
-## Questions or Need Help?
-
-- Check existing issues and PRs
-- Review script docstrings for detailed information
-- Open an issue with the `question` label
-
-## License Compliance
-
-By contributing, you agree that your contributions will be licensed under the MIT License and comply with all third-party licensing requirements (Unreal Engine EULA, Blender GPL, etc.).
-
-Thank you for contributing! 🎉
+Preserve attribution and license notices. See [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Report reproducible problems through [GitHub issues](https://github.com/Ghuile/3D-Mesh-pipeline/issues), including the relevant revision and environment.

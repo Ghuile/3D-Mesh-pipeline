@@ -1,3 +1,9 @@
+# Check generated OBJ vertex counts and bounding-box proportions in Blender.
+#
+# Runtime: Blender Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import sys
 import bpy
@@ -63,13 +69,13 @@ def run_dataset_validation():
         width = dimensions[0]
         height = dimensions[2]
 
-        # Human Proportions Rule: A person cannot be wider than they are tall!
+        # Apply the configured width-to-height heuristic.
         if width >= height:
             print(f"[-] MONSTER DETECTED ({file_name}): Extreme horizontal distortion! Width ({width:.2f}m) >= Height ({height:.2f}m).")
             failed_count += 1
             continue
 
-        # If it passes both checks, it is a clean human shape
+        # Count meshes passing these two checks; anatomical validity is not established.
         passed_count += 1
 
     print("\n--- FINAL DATASET METRIC LOGS ---")

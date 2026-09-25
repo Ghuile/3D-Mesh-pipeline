@@ -1,8 +1,6 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
 *.py[cod]
 *$py.class
-*.so
 
 # C extensions
 *.c
@@ -56,7 +54,6 @@ coverage.xml
 *.pot
 
 # Django stuff:
-*.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -128,8 +125,6 @@ dmypy.json
 .pyre/
 
 # IDE
-.vscode/
-.idea/
 *.swp
 *.swo
 *~
@@ -151,12 +146,8 @@ data_sanitized/**
 *.zip
 *.tar.gz
 *.7z
-*.fbx
-*.npz
 
 # Model checkpoints and weights
-*.pth
-*.pt
 *.ckpt
 
 # Output files

@@ -1,3 +1,9 @@
+# Generate OOD MetaHuman meshes using expanded scale ranges.
+#
+# Runtime: Unreal Editor Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import unreal
 
@@ -5,7 +11,7 @@ def execute_extreme_stress_test_dataset():
     # 1. Isolated absolute base path to protect your clean baseline data
     base_output_dir = "C:/Users/Vasileios Nikolaou/Documents/PhD/research_pipeline/data_stress_test/"
     
-    # 2. Symmetric demographics: Active passes for BOTH cohorts to satisfy reviewers
+    # Generate out-of-distribution samples for both female and male cohorts.
     active_presets = [
         ("/Game/MetaHumans/MH_Ada/BP_MH_Ada", "ada", "female_extreme_stress"),
         ("/Game/MetaHumans/MH_Aoi/BP_MH_Aoi", "aoi", "male_extreme_stress"), 

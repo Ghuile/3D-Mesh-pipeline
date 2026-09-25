@@ -1,3 +1,9 @@
+# Evaluate the female cohort under Gaussian coordinate perturbations.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import numpy as np
 import pandas as pd
@@ -11,9 +17,9 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
 from sklearn.metrics import mean_absolute_error, r2_score
 
-# ==========================================================================
+# -----------------------------------------------------------------------------
 # 1. ARCHITECTURE DEFINITION (Matches metahuman_extract_latents.py exactly)
-# ==========================================================================
+# -----------------------------------------------------------------------------
 class MorphologicalEncoder(nn.Module):
     def __init__(self, input_dim, latent_dim=32):
         super(MorphologicalEncoder, self).__init__()
@@ -29,9 +35,9 @@ class MorphologicalEncoder(nn.Module):
     def forward(self, x):
         return self.network(x)
 
-# ==========================================================================
+# -----------------------------------------------------------------------------
 # 2. NOISE INJECTION ENGINE (Simulates real-world scanner jitter)
-# ==========================================================================
+# -----------------------------------------------------------------------------
 def inject_mesh_noise(flat_coords, sigma):
     """
     Injects random high-frequency Gaussian coordinate jitter to simulate 
@@ -44,9 +50,9 @@ def inject_mesh_noise(flat_coords, sigma):
     noise = np.random.normal(0, sigma, size=flat_coords.shape)
     return flat_coords + noise
 
-# ==========================================================================
+# -----------------------------------------------------------------------------
 # 3. EXPERIMENTAL EXECUTION LOOP
-# ==========================================================================
+# -----------------------------------------------------------------------------
 def run_female_robustness_pipeline():
     print("==========================================================================")
     print("INITIALIZING NOISE ROBUSTNESS STRESS-TEST ENGINE: FEMALE COHORT (ADA)")
@@ -76,9 +82,9 @@ def run_female_robustness_pipeline():
     female_df = df_registry[df_registry['cohort'] == 'female']
     print(f" -> Detected {len(female_df)} valid entries for the Female Cohort.")
     
-    # ----------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
     # STEP A: Ingest and Compile Clean Raw Structural Coordinate Arrays
-    # ----------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
     print("\nStep A: Loading raw 3D spatial points from data directory...")
     X_raw_list = []
     y_list = []
@@ -98,9 +104,9 @@ def run_female_robustness_pipeline():
     y = np.array(y_list)
     print(f" -> Done. Raw Input Data Shape: {X_raw.shape}")
     
-    # ----------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
     # STEP B: Load and Initialize Pre-trained Morphological Encoder Weights
-    # ----------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
     print("\nStep B: Instantiating DSMAE Morphological Encoder Network...")
     encoder = MorphologicalEncoder(input_dim=input_size, latent_dim=32)
     weight_path = os.path.join(weights_dir, weight_file)
@@ -117,16 +123,16 @@ def run_female_robustness_pipeline():
     encoder.to(device).eval()
     print(" -> Encoder weights loaded successfully and network toggled to .eval() mode.")
     
-    # ----------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
     # STEP C: Perform Strict Train/Test Separation (80/20 Partition Matrix)
-    # ----------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
     # Split the raw data first to ensure clean training elements are separate from testing targets
     X_raw_train, X_raw_test, y_train, y_test = train_test_split(X_raw, y, test_size=0.20, random_state=42)
     print(f"\nStep C: Splitting Cohort Matrix -> Train: {X_raw_train.shape[0]} | Test: {X_raw_test.shape[0]}")
     
-    # ----------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
     # STEP D: Extract Pristine Latents to Train Downstream Regressor Heads
-    # ----------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
     print("\nStep D: Extracting clean training latents via DSMAE bottleneck...")
     train_tensor = torch.tensor(X_raw_train, dtype=torch.float32).to(device)
     with torch.no_grad():
@@ -148,10 +154,10 @@ def run_female_robustness_pipeline():
     gpr_head = GaussianProcessRegressor(kernel=gpr_kernel, alpha=1e-5, n_restarts_optimizer=15, random_state=42)
     gpr_head.fit(X_latent_train, y_train)
     
-    # ==========================================================================
+    # -----------------------------------------------------------------------------
     # STEP E: RUN PERTURBATION SWEEP ON THE HELD-OUT TEST MESHES
-    # ==========================================================================
-    # 0.001 standard deviation noise scale = 1 mm if mesh units are centimeter scaled (adjust if scaled to meters)
+    # -----------------------------------------------------------------------------
+    # The millimetre labels assume metre-valued coordinates: 0.001 m = 1 mm.
     noise_levels_mm = [0, 2, 5, 10, 20]
     noise_sigmas = [0.0, 0.002, 0.005, 0.010, 0.020] 
     
@@ -192,9 +198,9 @@ def run_female_robustness_pipeline():
         
         print(f"Noise: {mm:2d}mm | GPR R²: {gpr_r2:.4f}, MAE: {gpr_mae:.4f}% | MLP R²: {mlp_r2:.4f}, MAE: {mlp_mae:.4f}%")
         
-    # ==========================================================================
+    # -----------------------------------------------------------------------------
     # STEP F: COMPILE ACADEMIC PLOT CHART FOR COHORT SUBMISSION
-    # ==========================================================================
+    # -----------------------------------------------------------------------------
     print("\nStep F: Compiling high-resolution visualization figure layout...")
     plt.style.use('seaborn-v0_8-whitegrid' if 'seaborn-v0_8-whitegrid' in plt.style.available else 'default')
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))

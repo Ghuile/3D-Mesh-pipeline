@@ -1,3 +1,9 @@
+# Extract cohort-specific encoder features from parsed baseline meshes.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import torch
 import torch.nn as nn
@@ -20,6 +26,12 @@ class MorphologicalEncoder(nn.Module):
         return self.network(x)
 
 def run_latent_extraction():
+    """Save latent vectors, synthetic targets, and cohort labels as NPZ.
+
+    Reads the configured registry, mesh archives, and cohort checkpoints.
+    Each mesh is flattened to N * 3 coordinates and encoded to 32 features.
+    Verify checkpoint loading and cohort row order before using the output.
+    """
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     parsed_dir = r"C:\Users\Vasileios Nikolaou\Documents\PhD\research_pipeline\data_parsed"
     weights_dir = r"C:\Users\Vasileios Nikolaou\Documents\PhD\Metahuman_project"
@@ -48,7 +60,7 @@ def run_latent_extraction():
 
     extracted_latents = []
     extracted_targets = []
-    extracted_cohorts = [] # Added tracking array
+    extracted_cohorts = [] # Cohort label for each extracted feature row.
     
     for idx, row in df_registry.iterrows():
         cohort = row['cohort']
@@ -73,7 +85,7 @@ def run_latent_extraction():
         os.path.join(parsed_dir, "metahuman_extracted_features.npz"),
         latents=np.array(extracted_latents),
         targets=np.array(extracted_targets),
-        cohorts=np.array(extracted_cohorts) # Saved cohort tracking arrays cleanly
+        cohorts=np.array(extracted_cohorts) # Preserve cohort labels alongside features.
     )
     print("✅ Latent database serialized successfully.")
 
