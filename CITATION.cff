@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this pipeline, please cite the accompanying paper."
+title: "3D Mesh Pipeline"
+type: software
+authors:
+  - family-names: Nikolaou
+    given-names: Vasileios
+  - family-names: Chen
+    given-names: Daqing
+  - family-names: Xiao
+    given-names: Perry
+repository-code: "https://github.com/Ghuile/3D-Mesh-pipeline"
+preferred-citation:
+  type: conference-paper
+  title: "Decoupled Parametric Human Shape Generation: A Fully Synthetic Framework for Biometric and Adiposity Estimation"
+  authors:
+    - family-names: Nikolaou
+      given-names: Vasileios
+    - family-names: Chen
+      given-names: Daqing
+    - family-names: Xiao
+      given-names: Perry
+  year: 2026
+  url: "https://github.com/Ghuile/3D-Mesh-pipeline/blob/main/CPSI20_CR_Final.pdf"

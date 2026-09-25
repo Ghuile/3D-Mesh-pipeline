@@ -1,12 +1,19 @@
+# Parse baseline FBX meshes using the direct Open3D selection heuristic.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import re
 import numpy as np
 import open3d as o3d
 
 def parse_biometric_metadata(filename: str) -> dict:
-    """
-    Task D: Parses step matrix indices and continuous physical metrics 
-    directly from the file naming convention using strict decimal matching.
+    """Extract grid indices and dimensionless scales from a mesh filename.
+
+    Returns an empty dictionary when the expected decimal filename pattern
+    is absent. Scale parameters are not measured height or body composition.
     """
     metadata = {}
     complex_pattern = r"step_h(\d+)_f(\d+)_val_h(\d+\.\d+)_f(\d+\.\d+)"
@@ -20,9 +27,19 @@ def parse_biometric_metadata(filename: str) -> dict:
     return metadata
 
 def process_single_mesh(fbx_path: str, output_dir: str) -> tuple:
-    """
-    Task A & B: Opens the FBX via Open3D, isolates the core Body skin mesh 
-    by filtering for the correct vertex count range, and compresses arrays to .npz format.
+    """Save the first FBX mesh containing 8,000 to 15,000 vertices as NPZ.
+
+    Args:
+        fbx_path: Source FBX path readable by Open3D.
+        output_dir: Existing destination directory for the compressed archive.
+
+    Returns:
+        Vertex shape (N, 3), triangular-face shape (M, 3), and archive path.
+        The archive contains float32 coordinates, int32 indices, and any
+        parsed filename metadata. Coordinate units are inherited from input.
+
+    Raises:
+        ValueError: No mesh meets the vertex-count selection heuristic.
     """
     filename = os.path.basename(fbx_path)
     metadata = parse_biometric_metadata(filename)
@@ -36,7 +53,7 @@ def process_single_mesh(fbx_path: str, output_dir: str) -> tuple:
     for mesh_info in model.meshes:
         vertex_count = len(mesh_info.mesh.vertices)
         
-        # MetaHuman Body shell profile falls perfectly within this range
+        # Select the first mesh within the configured vertex-count range.
         if 8000 <= vertex_count <= 15000:
             body_mesh = mesh_info.mesh
             break

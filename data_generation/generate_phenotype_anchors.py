@@ -1,3 +1,9 @@
+# Generate Blender phenotype anchors using regional geometric deformations.
+#
+# Runtime: Blender Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import sys
 import math

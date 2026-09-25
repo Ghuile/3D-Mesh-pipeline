@@ -1,3 +1,9 @@
+# Evaluate MLP and Gaussian process regressors on baseline latent features.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -8,6 +14,17 @@ from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
 from sklearn.metrics import mean_absolute_error, r2_score
 
 def evaluate_isolated_cohort(X, y, cohort_name):
+    """Evaluate latent regressors using an 80/20 split with random_state=42.
+
+    Args:
+        X: Feature array with shape (samples, latent dimensions).
+        y: Synthetic BFP targets aligned with feature rows.
+        cohort_name: Label used in console output.
+
+    Returns:
+        Held-out targets, MLP predictions, GPR predictions, and GPR standard
+        deviations. MLP scaling is fitted on training data only.
+    """
     print(f"\n==================================================")
     print(f"       EVALUATING COHORT BRANCH: {cohort_name.upper()}         ")
     print(f"==================================================")
@@ -16,7 +33,7 @@ def evaluate_isolated_cohort(X, y, cohort_name):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
     print(f"[{cohort_name}] Dataset Split -> Train: {X_train.shape[0]} samples | Test: {X_test.shape[0]} samples")
     
-    # 2. Apply strict isolated Feature Scaling to prevent cross-gender blending noise
+    # Fit feature scaling on this cohort's training split only.
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
@@ -27,8 +44,8 @@ def evaluate_isolated_cohort(X, y, cohort_name):
         hidden_layer_sizes=(256, 128),  # Expanded layer width for high-dimensional resolution
         activation='relu',
         solver='adam',
-        alpha=1e-4,                     # Regularization penalty to prevent flattening
-        max_iter=3000,                  # Ample iteration window for absolute convergence
+        alpha=1e-4,                     # L2 regularization coefficient.
+        max_iter=3000,                  # Maximum optimizer iterations; convergence is not guaranteed.
         early_stopping=True,            # Prevents validation stagnation
         n_iter_no_change=20,
         random_state=42
@@ -85,7 +102,7 @@ def run_split_pipeline():
     X = data_source['latents']  
     y = data_source['targets']  
     
-    # Stratify into pure female and male segments
+    # Assume the first 100 rows are female and all remaining rows are male.
     X_female, y_female = X[:100], y[:100]
     X_male, y_male = X[100:], y[100:]
     

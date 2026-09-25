@@ -1,3 +1,9 @@
+# Evaluate both cohorts under Gaussian coordinate perturbations.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import numpy as np
 import pandas as pd
@@ -11,9 +17,9 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
 from sklearn.metrics import mean_absolute_error, r2_score
 
-# ==========================================================================
+# -----------------------------------------------------------------------------
 # 1. ARCHITECTURE DEFINITION (Matches metahuman_extract_latents.py exactly)
-# ==========================================================================
+# -----------------------------------------------------------------------------
 class MorphologicalEncoder(nn.Module):
     def __init__(self, input_dim, latent_dim=32):
         super(MorphologicalEncoder, self).__init__()
@@ -29,9 +35,9 @@ class MorphologicalEncoder(nn.Module):
     def forward(self, x):
         return self.network(x)
 
-# ==========================================================================
+# -----------------------------------------------------------------------------
 # 2. NOISE INJECTION ENGINE (Simulates real-world scanner jitter)
-# ==========================================================================
+# -----------------------------------------------------------------------------
 def inject_mesh_noise(flat_coords, sigma):
     """
     Injects random high-frequency Gaussian coordinate jitter to simulate 
@@ -43,9 +49,9 @@ def inject_mesh_noise(flat_coords, sigma):
     noise = np.random.normal(0, sigma, size=flat_coords.shape)
     return flat_coords + noise
 
-# ==========================================================================
+# -----------------------------------------------------------------------------
 # 3. COMBINED MASTER EXECUTION PIPELINE
-# ==========================================================================
+# -----------------------------------------------------------------------------
 def run_combined_robustness_pipeline():
     print("==========================================================================")
     print("INITIALIZING UNIFIED NOISE ROBUSTNESS PIPELINE: DUAL-BRANCH COHORTS")
@@ -173,9 +179,9 @@ def run_combined_robustness_pipeline():
         results_history[cohort_key] = cohort_metrics
         print(f" -> Successfully finished stress loop evaluation sweeps for {cohort_key} branch.")
 
-    # ==========================================================================
+    # -----------------------------------------------------------------------------
     # 4. UNIFIED VISUALIZATION GRAPH COMPILER (Publication-Grade 2x2 Layout)
-    # ==========================================================================
+    # -----------------------------------------------------------------------------
     print("\nStep 4: Compiling high-resolution consolidated visual subplots matrix...")
     plt.style.use('seaborn-v0_8-whitegrid' if 'seaborn-v0_8-whitegrid' in plt.style.available else 'default')
     fig, axes = plt.subplots(2, 2, figsize=(14, 9))

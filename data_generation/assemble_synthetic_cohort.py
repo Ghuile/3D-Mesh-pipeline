@@ -1,3 +1,9 @@
+# Assemble Blender meshes from a population CSV and base FBX asset.
+#
+# Runtime: Blender Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import sys
 import csv

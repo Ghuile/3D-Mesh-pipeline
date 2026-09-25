@@ -1,3 +1,9 @@
+# Convert sanitized OOD OBJ meshes to high-resolution NPZ arrays.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import re
 import numpy as np

@@ -1,3 +1,6 @@
+# Historical dependency lower bounds; not a locked reproduction environment.
+# Package declarations are preserved. See INSTALLATION.md for runtime separation.
+
 # Core scientific computing
 numpy>=1.21.0
 scipy>=1.7.0
@@ -19,7 +22,7 @@ trimesh>=3.9.0
 scikit-learn>=0.24.0
 
 # Optional: Blender integration (comes with Blender)
-# bpy  # Install via: blender --python -m pip install bpy
+# bpy  # Available inside Blender; see INSTALLATION.md
 
 # Optional: Unreal Engine integration (comes with Unreal Engine)
 # unreal  # Available within Unreal Engine Python API

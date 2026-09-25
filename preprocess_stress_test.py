@@ -1,3 +1,9 @@
+# Parse stress-test FBX meshes using the alternate Open3D route.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import re
 import numpy as np

@@ -25,7 +25,7 @@
 *.uasset binary
 *.umap binary
 
-# Jupyter Notebooks (binary JSON format)
+# Jupyter notebooks are JSON; retain the existing binary diff policy
 *.ipynb binary
 
 # Python Binary/Serialized Files

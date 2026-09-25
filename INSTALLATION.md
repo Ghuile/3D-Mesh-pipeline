@@ -1,175 +1,63 @@
-# Installation Guide
+# Installation
 
-## Prerequisites
+The project spans ordinary Python, Blender Python, and Unreal Editor Python. Training notebooks additionally use Google Colab and Google Drive.
 
-- Python 3.8 or higher
-- pip package manager
-- Virtual environment (recommended)
-- GPU with CUDA support (recommended for faster training)
-
-### Optional Prerequisites
-
-For advanced features:
-- **Blender 3.x or higher** - For mesh processing and sanitization
-- **Unreal Engine 5.x or higher** - For synthetic data generation via MetaHuman
-- **CUDA Toolkit** - For GPU acceleration with PyTorch
-
-## Step-by-Step Installation
-
-### 1. Clone the Repository
+## Local Python
 
 ```bash
-git clone <repository-url>
-cd research_pipeline
+git clone https://github.com/Ghuile/3D-Mesh-pipeline.git
+cd 3D-Mesh-pipeline
+python -m venv .venv
 ```
 
-### 2. Create Virtual Environment (Recommended)
+Activate the environment in your shell:
+
+```powershell
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
+```
 
 ```bash
-# On Windows
-python -m venv venv
-venv\Scripts\activate
-
-# On macOS/Linux
-python3 -m venv venv
-source venv/bin/activate
+# macOS or Linux
+source .venv/bin/activate
 ```
 
-### 3. Install Dependencies
+Install dependencies and check the analysis imports:
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
+python -c "import numpy, scipy, pandas, matplotlib, torch, sklearn; print('Analysis imports available')"
+python -c "import torch; print('CUDA available:', torch.cuda.is_available())"
 ```
 
-### 4. Optional: Install Blender Integration
+The requirements contain historical lower bounds, not a locked reproduction environment. This checkout does not establish a tested minimum Python version or complete package-version record. Record Python, package, GPU, and driver versions for each reproduction. An import check does not validate experiments or checkpoint compatibility.
 
-For mesh processing features:
+## Blender
+
+Sanitization wrappers launch an external Blender process. Their paths currently refer to Blender 5.1 on Windows. Configure `BLENDER_PATH` and input/output directories before running them.
+
+Scripts importing `bpy` under `data_generation/` must run inside Blender. Installing analysis requirements into ordinary Python does not provide that runtime. For example, after supplying the required base asset and CSV:
 
 ```bash
-# Install Blender Python API
-blender --python -m pip install bpy
+blender --background --python data_generation/assemble_synthetic_cohort.py -- data_generation/population_matrix.csv
 ```
 
-### 5. Optional: Install Unreal Engine Integration
+The wrappers contain embedded Blender source. Preserve that source in documentation-only changes. Compatibility with other Blender versions has not been established here.
 
-For synthetic data generation:
-- Install Unreal Engine 5.x
-- Enable Python API in Unreal Editor Preferences
-- Ensure Python 3.x is available in your UE5 installation
+## Unreal Engine and MetaHuman
 
-### 6. Verify Installation
+Run the Unreal generation scripts inside an Unreal Editor project with Python scripting and the referenced MetaHuman assets available. Inspect asset paths, active targets, output directories, and scale ranges first. The baseline generator currently has the female target commented out.
 
-```bash
-python -c "import torch; import open3d; import pandas; print('Installation successful!')"
-```
+The `unreal` module belongs to the editor runtime. Ordinary Python cannot execute these scripts by installing the requirements alone. Exact engine and MetaHuman versions used for the paper are not recorded in the dependency file.
 
-## Troubleshooting
+## Colab training
 
-### PyTorch Installation Issues
+Open the cohort-specific notebook and read its Markdown instructions before executing cells in order. Supply its parsed-data archive in Google Drive and configure the existing Drive paths. Both notebooks write shared script and artifact filenames, so use separate runtimes or preserve cohort-specific copies between runs.
 
-If you encounter issues with PyTorch, install the appropriate version for your system:
+Training creates a cohort checkpoint and `mean_template.npy` in the runtime working directory. Transfer these to the configured local checkpoint directory. Heatmaps expect the templates as `female_mean_template.npy` and `male_mean_template.npy`.
 
-```bash
-# For CUDA 11.8
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+## Data and configuration
 
-# For CUDA 12.1
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+The [reproducibility guide](docs/REPRODUCIBILITY.md) lists the execution sequence and required artifacts. Many scripts retain absolute research-workstation paths. There is no shared configuration file or universal command-line interface.
 
-# For CPU only
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
-# For macOS with MPS
-pip install torch torchvision
-```
-
-### Open3D Issues
-
-On some systems, you may need to install additional system dependencies:
-
-```bash
-# Ubuntu/Debian
-sudo apt-get install libopengl0 libglvnd0
-
-# macOS
-brew install open3d
-```
-
-### Blender Integration Issues
-
-If Blender integration doesn't work:
-
-```bash
-# Try using Blender's built-in Python
-/path/to/blender/python/bin/python -m pip install --upgrade pip
-/path/to/blender/python/bin/python -m pip install -r requirements.txt
-```
-
-### Unreal Engine Integration Issues
-
-For Unreal Engine compatibility:
-- Verify UE5 Python plugin is enabled
-- Check that Python path matches UE5 configuration
-- Ensure MetaHuman plugin is installed
-
-## GPU Setup (Recommended)
-
-For GPU acceleration with PyTorch:
-
-```bash
-# Verify CUDA installation
-python -c "import torch; print(torch.cuda.is_available())"
-
-# Check CUDA version
-python -c "import torch; print(torch.version.cuda)"
-```
-
-### Memory Requirements
-
-- **Minimum**: 6GB VRAM for 3D autoencoder training
-- **Recommended**: 8GB+ VRAM for optimal performance
-- **CPU Fallback**: Works with CPU but training will be significantly slower
-
-## Data Setup
-
-Create directories for data storage:
-
-```bash
-mkdir -p data_generation data_parsed data_sanitized
-```
-
-Note: These directories should remain empty when pushing to repository. Data files are managed separately via `.gitignore`.
-
-## Project Structure Verification
-
-After installation, verify the directory structure:
-
-```
-research_pipeline/
-├── data_generation/          # Synthetic data generation scripts
-├── data_parsed/              # Processed mesh data (not committed)
-├── data_sanitized/           # Sanitized data output (not committed)
-├── requirements.txt
-├── README.md
-├── INSTALLATION.md
-├── CONTRIBUTING.md
-├── LICENSE
-└── *.py                       # Core pipeline scripts
-```
-
-## Next Steps
-
-1. Refer to **README.md** for usage instructions
-2. Check **CONTRIBUTING.md** for development guidelines
-3. Review script docstrings for detailed parameter documentation
-4. Start with basic preprocessing: `python preprocess_pipeline.py`
-
-## System Recommendations
-
-| Component | Minimum | Recommended |
-|-----------|---------|-------------|
-| Python | 3.8 | 3.10+ |
-| RAM | 8GB | 16GB+ |
-| VRAM | 6GB | 12GB+ |
-| Storage | 100GB | 500GB+ |
-| OS | Windows/macOS/Linux | Linux preferred |
+Open3D is used by alternate direct-FBX preprocessing scripts. Trimesh, Pillow, SciPy, and torchvision remain in the historical requirements; this cleanup does not remove or update package declarations. GPU memory requirements have not been rebenchmarked.

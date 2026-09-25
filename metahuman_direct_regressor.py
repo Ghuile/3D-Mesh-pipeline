@@ -1,3 +1,9 @@
+# Evaluate a direct-coordinate Ridge regression baseline.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import numpy as np
 import pandas as pd

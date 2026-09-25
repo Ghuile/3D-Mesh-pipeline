@@ -1,3 +1,9 @@
+# Inspect parsed baseline mesh topology against cohort references.
+#
+# Runtime: local Python.
+# Inputs/outputs and configuration: see docs/REPRODUCIBILITY.md.
+# Review local paths and required assets before execution.
+
 import os
 import numpy as np
 
