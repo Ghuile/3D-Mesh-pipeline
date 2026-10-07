@@ -4,6 +4,8 @@ Notable changes to the research pipeline. Historical entries are retrospective s
 
 ## Unreleased
 
+- Published dataset cards for all four Hugging Face repositories, grouped them into a CPSI 2026 project collection, and added versioned documentation sources and complete dataset links.
+
 - Reworded historical commit titles and updated changelog links; historical file contents and experiment code are unchanged.
 
 - Added CPSI 2026 presentation details (Cambridge, 11–14 August 2026) to the README, citation metadata, and reproducibility guide; recorded the DOI verification status as of 7 October 2026.

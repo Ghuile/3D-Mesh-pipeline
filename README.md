@@ -47,13 +47,14 @@ Follow [INSTALLATION.md](INSTALLATION.md) to activate the environment and instal
 
 ## Data and artifacts
 
-The existing project documentation points to these external dataset repositories:
+The datasets are organized in the [3D Mesh Pipeline | CPSI 2026 collection](https://huggingface.co/collections/Ghuile/3d-mesh-pipeline-cpsi-2026). Each dataset card describes its contents, download procedure, provenance, and limitations.
 
 - [MetaHuman generation data](https://huggingface.co/datasets/Ghuile/metahuman-data-generation)
+- [Sanitized MetaHuman meshes](https://huggingface.co/datasets/Ghuile/metahuman-data-sanitized)
 - [Parsed MetaHuman data](https://huggingface.co/datasets/Ghuile/metahuman-data-parsed)
-- [Dataset collection](https://huggingface.co/Ghuile/datasets)
+- [Out-of-distribution stress-test data](https://huggingface.co/datasets/Ghuile/unreal-metahuman-stress-test)
 
-Check file listings and revisions before use. A separate sanitized-data URL, immutable dataset revisions, checksums, and a checkpoint release are not established by this checkout.
+The baseline repositories each contain 200 cohort meshes; the stress-test repository contains 200 variants in three processing formats. Download examples in the cards pin the inspected data revisions. See [the dataset documentation sources](docs/huggingface/README.md) for the repository map. A model-checkpoint release and an end-to-end reproduction remain unverified.
 
 | Location | Contents |
 |---|---|
