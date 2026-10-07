@@ -21,4 +21,12 @@ preferred-citation:
     - family-names: Xiao
       given-names: Perry
   year: 2026
+  conference:
+    name: "2026 International Conference on Cyber-Physical Social Intelligence (CPSI 2026)"
+    location: "University of Cambridge"
+    city: "Cambridge"
+    country: GB
+    date-start: 2026-08-11
+    date-end: 2026-08-14
+    website: "https://agist.org/CPSI2026/index.html"
   url: "https://github.com/Ghuile/3D-Mesh-pipeline/blob/main/CPSI20_CR_Final.pdf"

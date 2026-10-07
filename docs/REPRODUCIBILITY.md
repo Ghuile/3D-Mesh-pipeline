@@ -2,6 +2,8 @@
 
 This guide describes the checked-in scripts and notebooks, not a newly completed reproduction. The primary included reference is [CPSI20_CR_Final.pdf](../CPSI20_CR_Final.pdf).
 
+The paper was presented at [CPSI 2026](https://agist.org/CPSI2026/index.html), University of Cambridge, Cambridge, United Kingdom, 11–14 August 2026. The [LSBU research record](https://researchportal.lsbu.ac.uk/en/publications/decoupled-parametric-human-shape-generation-a-fully-synthetic-fra/) confirms the conference attribution. The included PDF remains the camera-ready artifact; a publisher DOI and IEEE Xplore publication date have not been verified as of 7 October 2026.
+
 ## Configuration and known differences
 
 | Item | Checked-in behavior or unresolved requirement |

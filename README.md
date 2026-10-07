@@ -2,6 +2,8 @@
 
 Research code accompanying **Decoupled Parametric Human Shape Generation: A Fully Synthetic Framework for Biometric and Adiposity Estimation**, by Vasileios Nikolaou, Daqing Chen, and Perry Xiao.
 
+Presented at the [2026 International Conference on Cyber-Physical Social Intelligence (CPSI 2026)](https://agist.org/CPSI2026/index.html), University of Cambridge, Cambridge, United Kingdom, 11–14 August 2026.
+
 The pipeline generates synthetic MetaHuman body meshes, prepares coordinate arrays, trains cohort-specific morphological autoencoders, and evaluates regression models for synthetic body-fat-percentage targets. It includes coordinate-noise experiments and out-of-distribution (OOD) evaluation.
 
 [Paper](CPSI20_CR_Final.pdf) · [Installation](INSTALLATION.md) · [Reproducibility](docs/REPRODUCIBILITY.md) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
@@ -68,7 +70,9 @@ Mesh arrays use `vertices` with shape `(N, 3)` and `faces` with shape `(M, 3)`. 
 
 Use the [camera-ready paper](CPSI20_CR_Final.pdf) as the primary included reference. The [earlier manuscript](CPSI%20Manuscript.pdf) remains for provenance; its figures and results differ from the camera-ready version.
 
-Citation metadata is provided in [CITATION.cff](CITATION.cff). Venue details and a DOI are omitted pending verification.
+Citation metadata, including the conference name, location, and dates, is provided in [CITATION.cff](CITATION.cff). The [LSBU research record](https://researchportal.lsbu.ac.uk/en/publications/decoupled-parametric-human-shape-generation-a-fully-synthetic-fra/) also records the conference presentation.
+
+As of 7 October 2026, a paper DOI has not been verified. Conference presentation and availability in IEEE Xplore are separate milestones; no DOI or IEEE publication date is inferred from the presentation date. Once the publisher's record is available, its DOI and bibliographic details should be added here and to `CITATION.cff`.
 
 ## License
 
